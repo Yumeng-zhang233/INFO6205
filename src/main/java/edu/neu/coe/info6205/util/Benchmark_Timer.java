@@ -4,12 +4,25 @@
 
 package edu.neu.coe.info6205.util;
 
+import edu.neu.coe.info6205.sort.BaseHelper;
+import edu.neu.coe.info6205.sort.GenericSort;
+import edu.neu.coe.info6205.sort.Helper;
+import edu.neu.coe.info6205.sort.simple.InsertionSort;
+import edu.neu.coe.info6205.sort.simple.InsertionSortOpt;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+
+
 import static edu.neu.coe.info6205.util.Utilities.formatWhole;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This class implements a simple Benchmark utility for measuring the running time of algorithms.
@@ -30,6 +43,46 @@ import static edu.neu.coe.info6205.util.Utilities.formatWhole;
  * @param <T> The generic type T is that of the input to the function f which you will pass in to the constructor.
  */
 public class Benchmark_Timer<T> implements Benchmark<T> {
+
+    public static void main(String[] args) {
+        int n = 1000;
+        //1.ordered
+        Integer[] array = new Integer[n];
+        for(int i = 0 ; i < n; i ++){
+            array[i] = i;
+        }
+        //2.reverse-ordered
+        Integer[] reverse = new Integer[n];
+        for(int i = n - 1 ; i >= 0; i --){
+            reverse[i] = n - i;
+        }
+        //3.random
+        Integer[] random = new Integer[n];
+        Random ran = new Random();
+       for (int i = 0; i < n ; i++) {
+           random[i] = ran.nextInt(n);
+       }
+       //4.partially-ordered
+        Integer[] partial = new Integer[n];
+       for(int i = 0 ; i < n/2; i ++){
+           partial[i] = i;
+       }
+       for(int i = n/2; i < n; i ++){
+          partial[i] = ran.nextInt(n);
+       }
+        Benchmark<Boolean> m = new Benchmark_Timer<>(
+                "Timer",
+             null,
+                b -> {
+                    InsertionSort sort = new InsertionSort();
+                    sort.sort(reverse,0, reverse.length);
+                },
+                  null
+                );
+        double res = m.run(true,20);
+        System.out.println("Time of array is " + res);
+    }
+
 
     /**
      * Calculate the appropriate number of warmup runs.
@@ -125,4 +178,6 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
     private final Consumer<T> fPost;
 
     final static LazyLogger logger = new LazyLogger(Benchmark_Timer.class);
+
+
 }
