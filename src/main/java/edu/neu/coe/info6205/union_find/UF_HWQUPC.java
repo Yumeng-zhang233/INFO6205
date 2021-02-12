@@ -7,8 +7,12 @@
  */
 package edu.neu.coe.info6205.union_find;
 
-import java.util.Arrays;
+import edu.neu.coe.info6205.sort.simple.InsertionSort;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
 /**
  * Height-weighted Quick Union with Path Compression
  */
@@ -82,6 +86,13 @@ public class UF_HWQUPC implements UF {
         validate(p);
         int root = p;
         // TO BE IMPLEMENTED
+        if (pathCompression) {
+            root = doPathCompression(root);
+        }else{
+            while(root != parent[root]){
+                root = parent[root];
+            }
+        }
         return root;
     }
 
@@ -169,12 +180,56 @@ public class UF_HWQUPC implements UF {
 
     private void mergeComponents(int i, int j) {
         // TO BE IMPLEMENTED make shorter root point to taller one
+        int iRoot = i;
+        int jRoot = j;
+        if(iRoot == jRoot){
+            return;
+        }
+        if(height[iRoot] < height[jRoot]){
+            updateParent(iRoot, jRoot);
+            updateHeight(jRoot, iRoot);
+        }else{
+            updateParent(jRoot, iRoot);
+            updateHeight(iRoot, jRoot);
+        }
     }
 
     /**
      * This implements the single-pass path-halving mechanism of path compression
      */
-    private void doPathCompression(int i) {
+    private int doPathCompression(int i) {
         // TO BE IMPLEMENTED update parent to value of grandparent
+        while(i != parent[i]){
+            parent[i] = parent[parent[i]];
+            i = parent[i];
+        }
+        return i;
     }
-}
+    private static int count(int n){
+        int connections = 0;
+        UF_HWQUPC uf = new UF_HWQUPC(n);
+        Random randomPairs = new Random();
+        int m = randomPairs.nextInt(n);
+        System.out.println("Pairs" + m);
+        for(int i = 0; i <= m; i ++){
+            int random1 = randomPairs.nextInt(n);
+            int random2 = randomPairs.nextInt(n);
+            if(!uf.connected(random1,random2)){
+                uf.union(random1,random2);
+
+                connections++;
+            }
+            }
+        return connections;
+        }
+        public static void main(String[] args) throws IOException {
+            Scanner scan = new Scanner(System.in);
+            String str = scan.nextLine();
+            int n = Integer. parseInt(str);
+            for(int i = n; i >0; i --){
+                int res = count(i);
+                System.out.println("The number of connections generated is: " + res);
+            }
+        }
+    }
+
