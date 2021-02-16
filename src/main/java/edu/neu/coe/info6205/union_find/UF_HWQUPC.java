@@ -209,27 +209,42 @@ public class UF_HWQUPC implements UF {
         int connections = 0;
         UF_HWQUPC uf = new UF_HWQUPC(n);
         Random randomPairs = new Random();
-        int m = randomPairs.nextInt(n);
-        System.out.println("Pairs" + m);
-        for(int i = 0; i <= m; i ++){
+        boolean[] printed = new boolean[n];
+        boolean loop = true;
+        //Generate random pairs until all sites are printed
+        while(loop){
             int random1 = randomPairs.nextInt(n);
             int random2 = randomPairs.nextInt(n);
+            printed[random1] = true;
+            printed[random2] = true;
+            connections++;
             if(!uf.connected(random1,random2)){
                 uf.union(random1,random2);
-
-                connections++;
             }
+            int i = 0;
+            while(i < n){
+                if(printed[i] == false){
+                    break;
+                }
+                i ++;
             }
+            if(i == n){
+                loop = false;
+            }
+        }
         return connections;
         }
         public static void main(String[] args) throws IOException {
             Scanner scan = new Scanner(System.in);
             String str = scan.nextLine();
             int n = Integer. parseInt(str);
+            int sum = 0;
             for(int i = n; i >0; i --){
                 int res = count(i);
-                System.out.println("The number of connections generated is: " + res);
+                sum += res;
+                System.out.println("The number of sites is "+i +"  The number of connections generated is: " + res);
             }
+            System.out.println("The average number of connections is: "+sum/n);
         }
     }
 
