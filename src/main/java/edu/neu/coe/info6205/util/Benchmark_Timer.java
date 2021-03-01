@@ -75,11 +75,11 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
              null,
                 b -> {
                     InsertionSort sort = new InsertionSort();
-                    sort.sort(reverse,0, reverse.length);
+                    sort.sort(partial,0,partial.length);
                 },
                   null
                 );
-        double res = m.run(true,20);
+        double res = m.run(true,100);
         System.out.println("Time of array is " + res);
     }
 

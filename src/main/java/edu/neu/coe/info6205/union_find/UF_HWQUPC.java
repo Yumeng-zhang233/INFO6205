@@ -205,9 +205,9 @@ public class UF_HWQUPC implements UF {
         }
         return i;
     }
-    private static int count(int n){
+    public static int count(int n, Boolean flag){
         int connections = 0;
-        UF_HWQUPC uf = new UF_HWQUPC(n);
+        UF_HWQUPC uf = new UF_HWQUPC(n, flag);
         Random randomPairs = new Random();
         boolean[] printed = new boolean[n];
         boolean loop = true;
@@ -240,7 +240,7 @@ public class UF_HWQUPC implements UF {
             int n = Integer. parseInt(str);
             int sum = 0;
             for(int i = n; i >0; i --){
-                int res = count(i);
+                int res = count(i,true);
                 sum += res;
                 System.out.println("The number of sites is "+i +"  The number of connections generated is: " + res);
             }
