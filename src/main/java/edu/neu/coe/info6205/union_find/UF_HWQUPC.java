@@ -180,7 +180,7 @@ public class UF_HWQUPC implements UF {
 
     private void mergeComponents(int i, int j) {
         // TO BE IMPLEMENTED make shorter root point to taller one
-        int iRoot = i;
+        /*int iRoot = i;
         int jRoot = j;
         if(iRoot == jRoot){
             return;
@@ -191,6 +191,18 @@ public class UF_HWQUPC implements UF {
         }else{
             updateParent(jRoot, iRoot);
             updateHeight(iRoot, jRoot);
+        }*/
+        //weighted quick union by height
+        if(i == j){
+            return;
+        }
+        if(height[i] < height[j]){
+            parent[i] = j;
+        }else if(height[i] > height[j]){
+            parent[j] = i;
+        }else{
+            parent[j] = i;
+            height[i]++;
         }
     }
 
